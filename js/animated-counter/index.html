@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>COUNTER</title>
+
+	<style>
+		@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: "Roboto", sans-serif;
+			background: #141654;
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-end;
+			height: 100vh;
+		}
+
+		header {
+			flex: 1;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		header h1 {
+			font-size: 60px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+	<header>
+		<h1>
+			<span class="counter">0</span>
+		</h1>
+	</header>
+
+	<script>
+		"use strict";
+
+		const counters = document.querySelectorAll(".counter");
+
+		const now = new Date();
+		const initial_ticks = now.getTime();
+
+		counters.forEach(counter => {
+			const updateCount = () => {
+				const now = new Date();
+				const ticks = now.getTime();
+				counter.innerText = ticks - initial_ticks;
+				setTimeout(updateCount, 1);
+			};
+			updateCount();
+		});
+	</script>
+</body>
+
+</html>

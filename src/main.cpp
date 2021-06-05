@@ -19,10 +19,7 @@ PORTB5  LED board (red)
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#define DECIMAL2GRAY(dec_num) (dec_num ^ dec_num >> 1)
-
-volatile uint16_t COUNTER_DEC = 0;
-volatile uint16_t COUNTER_GRAY = 0;
+volatile uint16_t COUNTER = 0;
 volatile uint8_t PORTB_NEW = 0;
 volatile uint8_t PORTD_NEW = 0;
 
@@ -31,24 +28,23 @@ volatile uint8_t PORTD_NEW = 0;
  */
 ISR(TIMER1_COMPA_vect)
 {
-    bitWrite(PORTB_NEW, PORTB5, bitRead(COUNTER_GRAY, 0));
-    bitWrite(PORTB_NEW, PORTB4, bitRead(COUNTER_GRAY, 1));
-    bitWrite(PORTB_NEW, PORTB3, bitRead(COUNTER_GRAY, 2));
-    bitWrite(PORTB_NEW, PORTB2, bitRead(COUNTER_GRAY, 3));
-    bitWrite(PORTB_NEW, PORTB1, bitRead(COUNTER_GRAY, 4));
-    bitWrite(PORTB_NEW, PORTB0, bitRead(COUNTER_GRAY, 5));
+    bitWrite(PORTB_NEW, PORTB5, bitRead(COUNTER, 0));
+    bitWrite(PORTB_NEW, PORTB4, bitRead(COUNTER, 1));
+    bitWrite(PORTB_NEW, PORTB3, bitRead(COUNTER, 2));
+    bitWrite(PORTB_NEW, PORTB2, bitRead(COUNTER, 3));
+    bitWrite(PORTB_NEW, PORTB1, bitRead(COUNTER, 4));
+    bitWrite(PORTB_NEW, PORTB0, bitRead(COUNTER, 5));
 
-    bitWrite(PORTD_NEW, PORTD7, bitRead(COUNTER_GRAY, 6));
-    bitWrite(PORTD_NEW, PORTD6, bitRead(COUNTER_GRAY, 7));
-    bitWrite(PORTD_NEW, PORTD5, bitRead(COUNTER_GRAY, 8));
+    bitWrite(PORTD_NEW, PORTD7, bitRead(COUNTER, 6));
+    bitWrite(PORTD_NEW, PORTD6, bitRead(COUNTER, 7));
+    bitWrite(PORTD_NEW, PORTD5, bitRead(COUNTER, 8));
 
     cli(); // Disable global interrupts.
     PORTB = PORTB_NEW;
     PORTD = PORTD_NEW;
     sei(); // Enable global interrupts.
 
-    ++COUNTER_DEC;
-    COUNTER_GRAY = DECIMAL2GRAY(COUNTER_DEC);
+    ++COUNTER;
 }
 
 /**
@@ -85,12 +81,14 @@ void setup()
     OCR1A = 63999
     t = 1 / 16E6 × ( 1 + 63999 ) = 4E-3
 
-    t        N    OCRA1
-    ===================
-    4E-03    1    63999
-    3E-03    1    47999
-    2E-03    1    31999
-    1E-03    1    15624
+        t        N    OCRA1
+    ========================
+        4E-03    1    63999
+        3E-03    1    47999
+        2E-03    1    31999
+        1E-03    1    15624
+     0.50E-03    1    7999
+     0.25E-03    1    3999
 
     */
 

@@ -22,6 +22,21 @@ http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontr
 https://www.locoduino.org/spip.php?article84
 
 
+# Samsung S21
+
+https://www.androidpolice.com/2021/01/20/samsungs-smaller-cheaper-s21-and-s21-beat-the-ultra-at-slow-mo-video/
+
+https://www.samsung.com/global/galaxy/galaxy-s21-5g/specs/
+
+Super Slow-mo only supports HD reans. On Galaxy S21 5G and S21+ 5G, users can record approximately 0.5 seconds of video captured at 960 fps with approximately 16 seconds of playback. On Galaxy S21 Ultra 5G, users can record approximately 1 second of video captured at 480 fps and digitally enhance the video to 960 fps with approximately 32 seconds of playback. Playback time can be edited in Super Slow-mo player.
+
+# Samsung S20
+
+https://www.samsung.com/ch_fr/smartphones/galaxy-s20/specs/
+
+Slow Motion
+960fps @HD, 240fps @FHD
+
 */
 
 #include <Arduino.h>
@@ -32,33 +47,75 @@ volatile uint16_t COUNTER = 0;
 volatile uint8_t PORTB_NEW = 0;
 volatile uint8_t PORTD_NEW = 0;
 
+#define DEBUG false
+
+#if DEBUG == true
+// For time measurement on the oscilloscope.
+#define DELAY_CYCLES(n) __builtin_avr_delay_cycles(n)
+#endif
+
+/**
+ * Reverse the order of a 16 bit number.
+ * It takes ~440 µs to execute.
+ */
+uint16_t reverse(uint16_t number)
+{
+    uint16_t ans = 0;
+    bitWrite(ans, 0, bitRead(number, 15));
+    bitWrite(ans, 1, bitRead(number, 14));
+    bitWrite(ans, 2, bitRead(number, 13));
+    bitWrite(ans, 3, bitRead(number, 12));
+    bitWrite(ans, 4, bitRead(number, 11));
+    bitWrite(ans, 5, bitRead(number, 10));
+    bitWrite(ans, 6, bitRead(number, 9));
+    bitWrite(ans, 7, bitRead(number, 8));
+    bitWrite(ans, 8, bitRead(number, 7));
+    bitWrite(ans, 9, bitRead(number, 6));
+    bitWrite(ans, 10, bitRead(number, 5));
+    bitWrite(ans, 11, bitRead(number, 4));
+    bitWrite(ans, 12, bitRead(number, 3));
+    bitWrite(ans, 13, bitRead(number, 2));
+    bitWrite(ans, 14, bitRead(number, 1));
+    bitWrite(ans, 15, bitRead(number, 0));
+    return ans;
+}
+
 /**
  *
  */
 ISR(TIMER1_COMPA_vect)
 {
-    bitWrite(PORTB_NEW, 5, bitRead(COUNTER, 0));
-    bitWrite(PORTB_NEW, 4, bitRead(COUNTER, 1));
-    bitWrite(PORTB_NEW, 3, bitRead(COUNTER, 2));
-    bitWrite(PORTB_NEW, 2, bitRead(COUNTER, 3));
-    bitWrite(PORTB_NEW, 1, bitRead(COUNTER, 4));
-    bitWrite(PORTB_NEW, 0, bitRead(COUNTER, 5));
 
-    bitWrite(PORTD_NEW, 7, bitRead(COUNTER, 6));
-    bitWrite(PORTD_NEW, 6, bitRead(COUNTER, 7));
-    bitWrite(PORTD_NEW, 5, bitRead(COUNTER, 8));
-    bitWrite(PORTD_NEW, 4, bitRead(COUNTER, 9));
-    bitWrite(PORTD_NEW, 3, bitRead(COUNTER, 10));
-    bitWrite(PORTD_NEW, 2, bitRead(COUNTER, 11));
-    bitWrite(PORTD_NEW, 1, bitRead(COUNTER, 12));
-    bitWrite(PORTD_NEW, 0, bitRead(COUNTER, 13));
+#if DEBUG == true
+    bitWrite(PORTC, PORTC0, HIGH);
+    DELAY_CYCLES(100);
+    bitWrite(PORTC, PORTC0, LOW);
+#endif
 
-    cli(); // Disable global interrupts.
+    // Disable global interrupts,
+    // Update output values and
+    // enable again global interrupts.
+    // Duration measured on oscilloscope:
+    // ~0.6 µs => 10 clock cycles
+    cli();
     PORTB = PORTB_NEW;
     PORTD = PORTD_NEW;
-    sei(); // Enable global interrupts.
+    sei();
 
+#if DEBUG == true
+    bitWrite(PORTC, PORTC0, HIGH);
+#endif
+
+    // Update counter for next iteration.
     ++COUNTER;
+
+    uint16_t reverse_counter = reverse(COUNTER);
+    PORTB_NEW = reverse_counter >> 8;
+    PORTD_NEW = reverse_counter; // Only the 8 first bits will be copied.
+
+#if DEBUG == true
+    bitWrite(PORTC, PORTC0, LOW);
+#endif
 }
 
 /**
@@ -68,10 +125,12 @@ void setup()
 {
     // All pins of PORTB and PORTD set to OUTPUT.
     DDRB = B11111111;
+    DDRC = B11111111;
     DDRD = B11111111;
 
-    // All ON.
+    // All outputs ON.
     PORTB = B11111111;
+    PORTC = B11111111;
     PORTD = B11111111;
 
     /*
@@ -99,7 +158,9 @@ void setup()
     ========================
         4E-03    1    63999
         3E-03    1    47999
+      2.08E-3    1    33332
         2E-03    1    31999
+     1.04E-03    1    16666
         1E-03    1    15999
      0.50E-03    1    7999
      0.25E-03    1    3999
@@ -116,6 +177,11 @@ void setup()
     OCR1A = 16666;              // Set compare match register to desired timer count.
     TIMSK1 |= (1 << OCIE1A);    // Enable timer compare interrupt.
     sei();                      // Enable global interrupts.
+
+    // All outputs OFF.
+    PORTB = B00000000;
+    PORTC = B00000000;
+    PORTD = B00000000;
 }
 
 /**

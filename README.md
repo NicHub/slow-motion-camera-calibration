@@ -1,7 +1,7 @@
 # CAMERA SLOW MOTION CALIBRATION
 
 <p align="center">
-<img height=600px src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/camera-slow-motion-calibration-001.jpg" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/camera-slow-motion-calibration-001.jpg" />
 </p>
 
 ## ABSTRACT

@@ -1,5 +1,9 @@
 # CAMERA SLOW MOTION CALIBRATION
 
+<p align="center">
+<img height=600px src="./raw/main/images/camera-slow-motion-calibration-001.jpg" />
+</p>
+
 ## ABSTRACT
 
 The goal of this project is to calibrate the slow motion frame rate of a smartphone.

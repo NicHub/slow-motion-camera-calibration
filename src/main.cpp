@@ -109,7 +109,7 @@ void configure_gpio()
 }
 
 /**
- * Explanation of the confoguration of timer1 can be found here:
+ * Explanation of the configuration of timer1 can be found here:
  * https://github.com/NicHub/camera-slow-motion-calibration#explanation-of-how-timer1-works-in-this-program
  */
 void configure_timer1()

@@ -42,14 +42,14 @@ Slow Motion
 
 ## EXPLANATION OF HOW TIMER1 WORKS IN THIS PROGRAM
 
-Timer1 is a 16 bit timer, that means it can count from 0 to (2^16 - 1).
-So basically it will count during 2^16 / FCPU = 4.10E-03 s before overflowing and returning to 0 and generate an interrupt that the program can handle in the ISR procedure (Interrupt Service Request).
-There are two mechanisms to tune the time at which the timer overflows :
+Timer1 is a 16-bit timer, which means that it can count from 0 to (2^16 - 1).
+So it will count for 4.10E-03 s (2^16 / FCPU) before it overflows and returns to 0 and generates an interrupt that the program can handle in the ISR (Interrupt Service Request) procedure.
+There are two mechanisms for setting the time when the timer overflows:
 
 1. THE PRESCALE FACTOR N
 
-This permits to divide the timer speed compared to the clock.
-Basicaly, the timer is incremented each N clock cycle.
+The pre-scale factor N is used to divide the timer speed from the clock speed.
+This is achieved by incrementing the timer every N clock cycles.
 N can take the following values: 1, 8, 64, 256, 1024
 For each value N, we can calculate the longest possible time before the timer overflows:
 

@@ -65,7 +65,7 @@ For each value N, we can calculate the longest possible time before the timer ov
 
 2. THE OUTPUT COMPARE REGISTER
 
-Instead of counting up to the maximum value, which is MAX = N × 2^16, we can configure the timer to overflow at a smaller value called TOP.
+Instead of counting up to the maximum value, which is `MAX = N × 2^16`, we can configure the timer to overflow at a smaller value called TOP.
 This TOP value is set in the Output Compare Register OCRA1.
 The time it takes for the timer to overflow is then:
 
@@ -74,11 +74,27 @@ The time it takes for the timer to overflow is then:
 
 ## THE CAMERA CALIBATION APPLICATION
 
-The cameras I want to calibrate have a frame rate of 960 fps, so each frame lasts 1/960 = 1.042E-03 s.
-This value is smaller than 4.10E-03 s in the table above, so we can use a prescaler N = 1.
+The cameras I want to calibrate have a frame rate of 960 fps, so each frame lasts `1/960 = 1.042E-03 s`.
+This value is smaller than `4.10E-03 s` in the table above, so we can use a prescaler `N = 1`.
 
 Next we can calculate the TOP value to be stored in OCRA1:
 
-    OCRA1 = ROUND( 1 / FRAME_RATE / N * FCPU - 1)
-    OCRA1 = ROUND( 1 / 960 / 1 * 16E6 - 1)
+    OCRA1 = ROUND( 1 / CAMERA_FRAME_RATE / N * FCPU - 1 )
+    OCRA1 = ROUND( 1 / 960 / 1 * 16E6 - 1 )
     OCRA1 = 16666
+
+Finaly, we can verify that the error on the final value is acceptable.
+
+    ARDUINO_FRAME_RATE = 1 / ( ( OCRA1 + 1 ) * N / FCPU )
+    ARDUINO_FRAME_RATE = 1 / ( ( 16666 + 1 ) * 1 / 16E6 )
+    ARDUINO_FRAME_RATE = 959.980
+
+    ERROR_ABS = ARDUINO_FRAME_RATE - CAMERA_FRAME_RATE
+    ERROR_ABS = 959.980 - 960
+    ERROR_ABS = 0.02
+
+    ERROR_REL = ARDUINO_FRAME_RATE / CAMERA_FRAME_RATE - 1
+    ERROR_REL = 959.980 / 960 - 1
+    ERROR_REL = -20 ppm
+
+We can see that after 1 s, which is the acquisition time of the cameras, the difference (jitter) between them and the Arduino will be by -0.02 frame (-20 ppm).

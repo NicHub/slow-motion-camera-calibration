@@ -2,13 +2,18 @@
 
 CAMERA SLOW MOTION CALIBRATION
 
+https://github.com/NicHub/camera-slow-motion-calibration
+
+© september 2021, ouilogique.com
+
 */
 
 #include <Arduino.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile uint16_t COUNTER = 0;
+volatile uint16_t COUNTER_NUMBER = 0;
+volatile uint16_t COUNTER_FRAME = 0;
 volatile uint8_t PORTB_NEW = 0;
 volatile uint8_t PORTD_NEW = 0;
 
@@ -20,12 +25,14 @@ volatile uint8_t PORTD_NEW = 0;
 #endif
 
 /**
- * Reverse the order of a 16 bit number.
+ * Reverse the bit order of a 16-bit number.
  * It takes ~2.25 µs to execute (~36 clock cycles).
+ * This is measured by toggling the PORTC1 pin
+ * and measuring the time the signal is LOW.
  * With my old oscilloscope I need to set OCR1A=200
  * to be able to see the signal.
  */
-uint16_t reverse(uint16_t number)
+uint16_t reverse_bit_order(uint16_t number)
 {
 #if DEBUG == true
     bitWrite(PORTC, PORTC1, LOW);
@@ -80,12 +87,22 @@ ISR(TIMER1_COMPA_vect)
 #endif
 
     // Update counter for next iteration.
-    ++COUNTER;
+    ++COUNTER_FRAME;
 
-    uint16_t reverse_counter = reverse(COUNTER);
+    uint16_t reverse_counter = reverse_bit_order(COUNTER_NUMBER);
     PORTB_NEW = reverse_counter >> (8 + 2); // PORTB has only 6 GPIOs. So we need to
                                             // shift the result by (8-6) = 2 bits.
     PORTD_NEW = reverse_counter >> (0 + 2); // Only the 8 first bits will be copied.
+
+    if (COUNTER_FRAME % 5 != 0)
+    {
+        PORTB_NEW = B00000000;
+        PORTD_NEW = B00000000;
+    }
+    else
+    {
+        ++COUNTER_NUMBER;
+    }
 
 #if DEBUG == true
     bitWrite(PORTC, PORTC0, LOW);

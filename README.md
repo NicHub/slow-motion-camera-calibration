@@ -8,7 +8,7 @@
 
 The goal of this project is to calibrate the slow motion frame rate of a smartphone.
 14 LEDs are displaying a counter that counts from 0 to 16383 in binary.
-The counter is updated at 1 ms interval with a timer.
+The counter is updated at 960 Hz by a timer.
 
 ## SETUP
 

@@ -12,6 +12,25 @@ import cv2
 import os
 
 
+def mean_hsv_val_around_px(hsv, px_loc):
+    """ ___ """
+    mean_h = 0
+    mean_s = 0
+    mean_v = 0
+    roi_half_size = 5
+    pixel_count = roi_half_size*roi_half_size * 4
+    counter = 0
+    for _x in range(px_loc[1]-roi_half_size, px_loc[1]+roi_half_size):
+        for _y in range(px_loc[0]-roi_half_size, px_loc[0]+roi_half_size):
+            counter += 1
+            mean_h += hsv[_x, _y][0]
+            mean_s += hsv[_x, _y][1]
+            mean_v += hsv[_x, _y][2]
+
+    mean_v = int(round(mean_v / pixel_count, 0))
+    return mean_v
+
+
 def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
     """
     flip =
@@ -25,7 +44,8 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
     capture_image = cv2.VideoCapture(video_fullpath)
     frame_count = 0
 
-    while (True):
+    binary_nums = []
+    while True:
 
         con, frame = capture_image.read()
 
@@ -33,26 +53,48 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
             if flip in (0, 1):
                 frame = cv2.flip(frame, flip)
             image_path = f"{images_path}{video_name}-flip{flip}-{frame_count:06}-nogit.jpg"
-            print(image_path)
-            # print(frame[719, 0])
-
             hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
             binary_num = 0
             for cnt, px_loc in enumerate(px_locations):
-                val = hsv[px_loc[1], px_loc[0]]
-                print(val)
-                if val[2] > 250:
-                    binary_num += 2 ** cnt
-            print(f"binary_num = {binary_num}")
-            print(f"binary_num = {bin(binary_num)}")
+                mean_v = mean_hsv_val_around_px(hsv, px_loc)
+                bit_val = mean_v > 253
 
+                val = hsv[px_loc[1], px_loc[0]]
+                str = "0"
+                color = (0, 255, 0, 255)
+                if bit_val:
+                    str = "1"
+                    color = (0, 0, 255, 255)
+                    binary_num += 2 ** cnt
+
+                pos = (px_loc[0], 540)
+                cv2.circle(frame, px_loc, 25, color, 5)
+                cv2.circle(frame, pos, 20, (0, 0, 0), -1)
+                cv2.putText(
+                    frame,
+                    f"{mean_v}",
+                    (pos[0]-10, pos[1]+10),
+                    cv2.FONT_HERSHEY_SIMPLEX,  # font family
+                    0.5,  # font size
+                    color,
+                    2)  # font stroke
+
+            # print(f"binary_num = {binary_num} = {bin(binary_num)}")
+            print(f"{binary_num}")
+            binary_nums.append(f"{binary_num}")
 
             cv2.imwrite(image_path, frame)
             frame_count += 1
-            if frame_count > 1:
-                break
+            # if frame_count > 20:
+            #     break
         else:
             break
+
+    ans = "\n".join(binary_nums)
+    _f = open("camera-calib.csv", "w")
+    _f.write(ans)
+    _f.close()
+
 
 
 if __name__ == "__main__":
@@ -65,14 +107,14 @@ if __name__ == "__main__":
         "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/movies-nogit/20210919_145432.mp4")
 
     px_locations = (
-        (908, 486),
-        (860, 486),
-        (809, 512),
-        (754, 496),
-        (700, 487),
-        (657, 486),
-        (604, 483),
-        (551, 486),
+        (908, 493),
+        (856, 485),
+        (805, 508),
+        (754, 498),
+        (704, 486),
+        (654, 485),
+        (604, 485),
+        (555, 486),
         (508, 487),
         (455, 500),
         (405, 499),

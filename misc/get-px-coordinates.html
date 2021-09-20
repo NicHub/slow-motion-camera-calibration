@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PX COORDS</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <img id="myImgId" src="../images-nogit/20210920_171411-flip-1-000019-nogit.jpg" />
+    <p><span id="coord"></span></p>
+    <script type="text/javascript">
+        var myImg = document.getElementById("myImgId");
+        myImg.onmousedown = GetCoordinates;
+
+
+        function FindPosition(oElement) {
+            if (typeof (oElement.offsetParent) != "undefined") {
+                for (var posX = 0, posY = 0; oElement; oElement = oElement.offsetParent) {
+                    posX += oElement.offsetLeft;
+                    posY += oElement.offsetTop;
+                }
+                return [posX, posY];
+            }
+            else {
+                return [oElement.x, oElement.y];
+            }
+        }
+
+        function GetCoordinates(e) {
+            var PosX = 0;
+            var PosY = 0;
+            var ImgPos;
+            ImgPos = FindPosition(myImg);
+            if (!e) var e = window.event;
+            if (e.pageX || e.pageY) {
+                PosX = e.pageX;
+                PosY = e.pageY;
+            }
+            else if (e.clientX || e.clientY) {
+                PosX = e.clientX + document.body.scrollLeft
+                    + document.documentElement.scrollLeft;
+                PosY = e.clientY + document.body.scrollTop
+                    + document.documentElement.scrollTop;
+            }
+            PosX = PosX - ImgPos[0];
+            PosY = PosY - ImgPos[1];
+
+            PosXY = "(" + PosX + ", " + PosY + "),\n";
+            navigator.clipboard.writeText(PosXY);
+            console.log(PosXY);
+            document.getElementById("coord").innerHTML = PosXY;
+        }
+    </script>
+
+
+</body>
+
+</html>

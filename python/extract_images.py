@@ -50,6 +50,7 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
         con, frame = capture_image.read()
 
         if con:
+            frame = cv2.rotate(frame, cv2.cv2.ROTATE_90_CLOCKWISE)
             if flip in (0, 1):
                 frame = cv2.flip(frame, flip)
             image_path = f"{images_path}{video_name}-flip{flip}-{frame_count:06}-nogit.jpg"
@@ -80,7 +81,7 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
                     2)  # font stroke
 
             # print(f"binary_num = {binary_num} = {bin(binary_num)}")
-            print(f"{binary_num}")
+            # print(f"{binary_num}")
             binary_nums.append(f"{binary_num}")
 
             cv2.imwrite(image_path, frame)
@@ -99,27 +100,56 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
 
 if __name__ == "__main__":
 
-    images_path = os.path.expanduser(
-        "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/images-nogit/")
-    if not os.path.exists(images_path):
-        os.makedirs(images_path)
-    video_fullpath = os.path.expanduser(
-        "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/movies-nogit/20210919_145432.mp4")
+    source = 1
 
-    px_locations = (
-        (908, 493),
-        (856, 485),
-        (805, 508),
-        (754, 498),
-        (704, 486),
-        (654, 485),
-        (604, 485),
-        (555, 486),
-        (508, 487),
-        (455, 500),
-        (405, 499),
-        (345, 494),
-        (294, 494),
-        (248, 494),
-    )
-    extract_images_from_video(video_fullpath, images_path, 1, px_locations)
+    if source == 0:
+        images_path = os.path.expanduser(
+            "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/images-nogit/")
+        if not os.path.exists(images_path):
+            os.makedirs(images_path)
+        video_fullpath = os.path.expanduser(
+            "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/movies-nogit/20210919_145432.mp4")
+        flip = 1
+        px_locations = (
+            (908, 493),
+            (856, 485),
+            (805, 508),
+            (754, 498),
+            (704, 486),
+            (654, 485),
+            (604, 485),
+            (555, 486),
+            (508, 487),
+            (455, 500),
+            (405, 499),
+            (345, 494),
+            (294, 494),
+            (248, 494),
+        )
+
+    if source == 1:
+        images_path = os.path.expanduser(
+            "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/images-nogit/")
+        if not os.path.exists(images_path):
+            os.makedirs(images_path)
+        video_fullpath = os.path.expanduser(
+            "~/Documents/PlatformIO/Projects/camera-slow-motion-calibration/movies-nogit/20210920_171411.mp4")
+        flip = -1
+        px_locations = (
+            (970, 367),
+            (916, 365),
+            (864, 356),
+            (807, 369),
+            (753, 365),
+            (704, 348),
+            (651, 343),
+            (598, 344),
+            (546, 340),
+            (496, 336),
+            (443, 344),
+            (388, 359),
+            (337, 346),
+            (291, 349),
+        )
+
+    extract_images_from_video(video_fullpath, images_path, flip, px_locations)

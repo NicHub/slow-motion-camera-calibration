@@ -12,101 +12,45 @@ https://github.com/NicHub/camera-slow-motion-calibration
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile uint16_t COUNTER_NUMBER = 0;
-volatile uint16_t COUNTER_FRAME = 0;
+volatile uint16_t COUNTER = 0;
 volatile uint8_t PORTB_NEW = 0;
 volatile uint8_t PORTD_NEW = 0;
 
 #define DEBUG true
 
 #if DEBUG == true
-// For time measurement on the oscilloscope.
+// DELAY_CYCLES(n) is for time measurement on the oscilloscope.
+//
+// https://gcc.gnu.org/onlinedocs/gcc/AVR-Built-in-Functions.html
+// Delay execution for ticks cycles.
+// Note that this built-in does not take into account the effect
+// of interrupts that might increase delay time.
+// ticks must be a compile-time integer constant;
+// delays with a variable number of cycles are not supported.
+// n = 16000 cycles => delay = 1ms
 #define DELAY_CYCLES(n) __builtin_avr_delay_cycles(n)
 #endif
 
 /**
- * Reverse the bit order of a 16-bit number.
- * It takes ~2.25 µs to execute (~36 clock cycles).
- * This is measured by toggling the PORTC1 pin
- * and measuring the time the signal is LOW.
- * With my old oscilloscope I need to set OCR1A=200
- * to be able to see the signal.
- */
-uint16_t reverse_bit_order(uint16_t number)
-{
-#if DEBUG == true
-    bitWrite(PORTC, PORTC1, LOW);
-#endif
-    uint16_t ans = 0;
-    bitWrite(ans, 0, bitRead(number, 15));
-    bitWrite(ans, 1, bitRead(number, 14));
-    bitWrite(ans, 2, bitRead(number, 13));
-    bitWrite(ans, 3, bitRead(number, 12));
-    bitWrite(ans, 4, bitRead(number, 11));
-    bitWrite(ans, 5, bitRead(number, 10));
-    bitWrite(ans, 6, bitRead(number, 9));
-    bitWrite(ans, 7, bitRead(number, 8));
-    bitWrite(ans, 8, bitRead(number, 7));
-    bitWrite(ans, 9, bitRead(number, 6));
-    bitWrite(ans, 10, bitRead(number, 5));
-    bitWrite(ans, 11, bitRead(number, 4));
-    bitWrite(ans, 12, bitRead(number, 3));
-    bitWrite(ans, 13, bitRead(number, 2));
-    bitWrite(ans, 14, bitRead(number, 1));
-    bitWrite(ans, 15, bitRead(number, 0));
-#if DEBUG == true
-    bitWrite(PORTC, PORTC1, HIGH);
-#endif
-    return ans;
-}
-
-/**
  *
  */
-volatile uint16_t number = 0;
 ISR(TIMER1_COMPA_vect)
 {
 #if DEBUG == true
-    bitWrite(PORTC, PORTC0, HIGH);
-    DELAY_CYCLES(100);
-    bitWrite(PORTC, PORTC0, LOW);
+    bitToggle(PORTC, PORTC0);
 #endif
 
     // Disable global interrupts,
     // Update output values and
     // enable again global interrupts.
-    // Duration measured on oscilloscope:
-    // ~0.6 µs => 10 clock cycles
     cli();
     PORTB = PORTB_NEW;
     PORTD = PORTD_NEW;
     sei();
 
-#if DEBUG == true
-    bitWrite(PORTC, PORTC0, HIGH);
-#endif
-
-    // Update counter for next iteration.
-    ++COUNTER_FRAME;
-
-    uint16_t reverse_counter = reverse_bit_order(COUNTER_NUMBER);
-    PORTB_NEW = reverse_counter >> (8 + 2); // PORTB has only 6 GPIOs. So we need to
-                                            // shift the result by (8-6) = 2 bits.
-    PORTD_NEW = reverse_counter >> (0 + 2); // Only the 8 first bits will be copied.
-
-    if (COUNTER_FRAME % 5 != 0)
-    {
-        PORTB_NEW = B00000000;
-        PORTD_NEW = B00000000;
-    }
-    else
-    {
-        ++COUNTER_NUMBER;
-    }
-
-#if DEBUG == true
-    bitWrite(PORTC, PORTC0, LOW);
-#endif
+    ++COUNTER;
+    PORTB_NEW = COUNTER >> (8);
+    PORTD_NEW = COUNTER; // Only the 8 first bits will be copied.
 }
 
 /**

@@ -130,11 +130,11 @@ The middle part is the slow motion part.
 It last from frame 27 to frame 990, i.e. from t = 1 s to t = 2 s.
 There are 1018 frames in total.
 
-| PART | FRAME RATE (fps) | PERIOD (ms) |
-| --:  | --:              | --:         |
-| 1    | 25.3             | 39.468      |
-| 2    | 967.4            | 1.034       |
-| 3    | 30.0             | 33.334      |
+| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |           1 |         27 |          27 |  1.066 |             25.3 |              39.468 |
+|    2 |          28 |        990 |         963 |  0.999 |            963.7 |               1.038 |
+|    3 |         991 |       1018 |          28 |  0.934 |             30.0 |              33.340 |
 
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s21-ultra-5g-plot.png" />

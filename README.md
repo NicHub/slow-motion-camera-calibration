@@ -114,6 +114,9 @@ Open the spreadsheet `analysis/camera-slow-motion-calibration.ods`.
 
 Duplicate an existing analysis sheet and copy-paste your results in this new sheet.
 
+<p align="center">
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/20210920_171411-flip-1-000011.jpg" />
+</p>
 
 ## RESULTS
 

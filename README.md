@@ -125,9 +125,7 @@ Duplicate an existing analysis sheet and copy-paste your results in this new she
 The frame rate of this smartphone is not constant over time.
 It goes faster (i.e. not slowmo) at the beginning and at the end of the movie.
 So there are 3 distinct parts to calibrate.
-
 The middle part is the slow motion part.
-It last from frame 27 to frame 990, i.e. from t = 1 s to t = 2 s.
 There are 1018 frames in total.
 
 | PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |

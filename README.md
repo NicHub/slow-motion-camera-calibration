@@ -98,8 +98,40 @@ Finaly, we can verify that the error on the final value is acceptable.
 
 We can see that after 1 s, which is the acquisition time of the cameras, the difference (jitter) between them and the Arduino will be by -0.02 frame (-20 ppm).
 
+## ANALYSIS
+
+The analysis of the movie is done with a Python 3 script `analysis/analysis.py`.
+
+Run it once to extract the images of the movie. You can kill it after it has generated the first image.
+
+Then use the html file `analysis/get-px-coordinates.html` to get the coordinates of the LED on one picture.
+
+Modify the Python script with the correct coordinates and run it again.
+
+The results are stored in `analysis/camera-calib.csv`.
+
+Open the spreadsheet `analysis/camera-slow-motion-calibration.ods`.
+
+Duplicate an existing analysis sheet and copy-paste your results in this new sheet.
+
 
 ## RESULTS
+
+### SAMSUNG GALAXY S21 ULTRA 5G
+
+The frame rate of this smartphone is not constant over time.
+It goes faster (i.e. not slowmo) at the beginning and at the end of the movie.
+So there are 3 distinct parts to calibrate.
+
+The middle part is the slow motion part.
+It last from frame 27 to frame 990, i.e. from t = 1 s to t = 2 s.
+There are 1018 frames in total.
+
+| PART | FRAME RATE (fps) | PERIOD (ms) |
+| --:  | --:              | --:         |
+| 1    | 25.3             | 39.468      |
+| 2    | 967.4            | 1.034       |
+| 3    | 30.0             | 33.334      |
 
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s21-ultra-5g-plot.png" />

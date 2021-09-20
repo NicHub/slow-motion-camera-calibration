@@ -7,13 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PX COORDS</title>
     <style>
-
+        body{font-family: Arial; text-align:center;}
     </style>
 </head>
 
 <body>
-    <img id="myImgId" src="../images-nogit/20210920_171411-flip-1-000019-nogit.jpg" />
-    <p><span id="coord"></span></p>
+    <h1>Coordinates grabber</h1>
+    <p>Edit this HTML file to modify the URL of the image.</p>
+    <p>Then click on the LED to get their coordinates.
+        They will be copied in the clipboard.
+    </p>
+    <p><span id="coord">&nbsp;</span></p>
+    <img id="myImgId" src="../images/20210920_171411-flip-1-000011.jpg" />
     <script type="text/javascript">
         var myImg = document.getElementById("myImgId");
         myImg.onmousedown = GetCoordinates;

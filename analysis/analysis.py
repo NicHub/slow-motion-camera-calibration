@@ -100,7 +100,7 @@ def extract_images_from_video(video_fullpath, images_path, flip, px_locations):
 
 if __name__ == "__main__":
 
-    source = 1
+    source = 3
 
     if source == 0:
         images_path = os.path.expanduser(
@@ -150,6 +150,56 @@ if __name__ == "__main__":
             (388, 359),
             (337, 346),
             (291, 349),
+        )
+
+    if source == 2:
+        images_path = os.path.expanduser(
+            "~/Desktop/camera-slow-motion-calibration/images-nogit/")
+        if not os.path.exists(images_path):
+            os.makedirs(images_path)
+        video_fullpath = os.path.expanduser(
+            "~//Desktop/camera-slow-motion-calibration/videos-nogit/20210922_123911.mp4")
+        flip = -1
+        px_locations = (
+            (1167, 380),
+            (1086, 381),
+            (1009, 369),
+            (929, 397),
+            (846, 397),
+            (766, 375),
+            (683, 381),
+            (610, 381),
+            (530, 377),
+            (453, 378),
+            (365, 399),
+            (281, 418),
+            (194, 377),
+            (113, 406),
+        )
+
+    if source == 3:
+        images_path = os.path.expanduser(
+            "~/Desktop/camera-slow-motion-calibration/images-nogit/")
+        if not os.path.exists(images_path):
+            os.makedirs(images_path)
+        video_fullpath = os.path.expanduser(
+            "~//Desktop/camera-slow-motion-calibration/videos-nogit/20210922_133004.mp4")
+        flip = -1
+        px_locations = (
+            (242, 469),
+            (306, 458),
+            (366, 469),
+            (420, 460),
+            (478, 460),
+            (544, 469),
+            (598, 480),
+            (652, 477),
+            (714, 483),
+            (770, 481),
+            (832, 469),
+            (890, 459),
+            (951, 485),
+            (1013, 465),
         )
 
     extract_images_from_video(video_fullpath, images_path, flip, px_locations)

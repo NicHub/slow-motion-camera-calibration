@@ -120,6 +120,40 @@ Duplicate an existing analysis sheet and copy-paste your results in this new she
 
 ## RESULTS
 
+### SAMSUNG GALAXY S20+
+
+The frame rate of this smartphone is not constant over time.
+It goes faster (i.e. not slowmo) at the beginning and at the end of the movie.
+So there are 3 distinct parts to calibrate.
+The middle part is the slow motion part.
+There are 432 frames in total (good).
+The phone I used for the tests has a bug. Sometimes it captures only 296 frames in total (bad).
+I present both good and bad results below.
+
+#### BAD RESULTS
+
+| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |           1 |         29 |          29 |  0.938 |             30.9 |              32.340 |
+|    2 |          30 |        267 |         238 |  0.409 |            582.0 |               1.718 |
+|    3 |         268 |        296 |          29 |  1.421 |             20.4 |              48.995 |
+
+<p align="center">
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-bad.png" />
+</p>
+
+#### GOOD RESULTS
+
+| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |           1 |         30 |          30 |  0.966 |             31.1 |              32.200 |
+|    2 |          31 |        406 |         376 |  0.396 |            948.4 |               1.054 |
+|    3 |         407 |        432 |          26 |  1.002 |             26.0 |              38.522 |
+
+<p align="center">
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-good.png" />
+</p>
+
 ### SAMSUNG GALAXY S21 ULTRA 5G
 
 The frame rate of this smartphone is not constant over time.

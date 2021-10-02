@@ -7,8 +7,8 @@
 ## ABSTRACT
 
 The goal of this project is to calibrate the slow motion frame rate of a smartphone.
-14 LEDs are displaying a counter that counts from 0 to 16383 in binary.
-The counter is updated at 960 Hz by a timer.
+14 LEDs are displaying a counter that counts from 0 to 16’383 in binary.
+The counter is updated at 960 Hz by timer1 of the ATmega328P microcontroler.
 
 ## SETUP
 
@@ -29,15 +29,14 @@ https://www.androidpolice.com/2021/01/20/samsungs-smaller-cheaper-s21-and-s21-be
 
 https://www.samsung.com/global/galaxy/galaxy-s21-5g/specs/
 
-Super Slow-mo only supports HD resolution. On Galaxy S21 5G and S21+ 5G, users can record approximately 0.5 seconds of video captured at 960 fps with approximately 16 seconds of playback. On Galaxy S21 Ultra 5G, users can record approximately 1 second of video captured at 480 fps and digitally enhance the video to 960 fps with approximately 32 seconds of playback. Playback time can be edited in Super Slow-mo player.
+> Super Slow-mo only supports HD resolution. On Galaxy S21 5G and S21+ 5G, users can record approximately 0.5 seconds of video captured at 960 fps with approximately 16 seconds of playback. On Galaxy S21 Ultra 5G, users can record approximately 1 second of video captured at 480 fps and digitally enhance the video to 960 fps with approximately 32 seconds of playback. Playback time can be edited in Super Slow-mo player.
 
 ## Samsung S20
 
 https://www.samsung.com/ch_fr/smartphones/galaxy-s20/specs/
 
-Slow Motion
-960fps @HD, 240fps @FHD
-
+> Slow Motion
+> 960fps @HD, 240fps @FHD
 
 ## EXPLANATION OF HOW TIMER1 WORKS IN THIS PROGRAM
 
@@ -132,11 +131,11 @@ I present both good and bad results below.
 
 #### BAD RESULTS
 
-| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
-| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
-|    1 |           1 |         29 |          29 |  0.938 |             30.9 |              32.340 |
-|    2 |          30 |        267 |         238 |  0.409 |            582.0 |               1.718 |
-|    3 |         268 |        296 |          29 |  1.421 |             20.4 |              48.995 |
+| PART | FIRST FRAME # | LAST FRAME # | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ------------: | -----------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |             1 |           29 |          29 |  0.938 |             30.9 |              32.340 |
+|    2 |            30 |          267 |         238 |  0.409 |            582.0 |               1.718 |
+|    3 |           268 |          296 |          29 |  1.421 |             20.4 |              48.995 |
 
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-bad.png" />
@@ -144,11 +143,11 @@ I present both good and bad results below.
 
 #### GOOD RESULTS
 
-| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
-| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
-|    1 |           1 |         30 |          30 |  0.966 |             31.1 |              32.200 |
-|    2 |          31 |        406 |         376 |  0.396 |            948.4 |               1.054 |
-|    3 |         407 |        432 |          26 |  1.002 |             26.0 |              38.522 |
+| PART | FIRST FRAME # | LAST FRAME # | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ------------: | -----------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |             1 |           30 |          30 |  0.966 |             31.1 |              32.200 |
+|    2 |            31 |          406 |         376 |  0.396 |            948.4 |               1.054 |
+|    3 |           407 |          432 |          26 |  1.002 |             26.0 |              38.522 |
 
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-good.png" />
@@ -162,11 +161,11 @@ So there are 3 distinct parts to calibrate.
 The middle part is the slow motion part.
 There are 1018 frames in total.
 
-| PART | FIRST FRAME | LAST FRAME | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
-| ---: | ----------: | ---------: | ----------: | -----: | ---------------: | ------------------: |
-|    1 |           1 |         27 |          27 |  1.066 |             25.3 |              39.468 |
-|    2 |          28 |        990 |         963 |  0.999 |            963.7 |               1.038 |
-|    3 |         991 |       1018 |          28 |  0.934 |             30.0 |              33.340 |
+| PART | FIRST FRAME # | LAST FRAME # | FRAME COUNT | ΔT (s) | FRAME RATE (fps) | FRAME DURATION (ms) |
+| ---: | ------------: | -----------: | ----------: | -----: | ---------------: | ------------------: |
+|    1 |             1 |           27 |          27 |  1.066 |             25.3 |              39.468 |
+|    2 |            28 |          990 |         963 |  0.999 |            963.7 |               1.038 |
+|    3 |           991 |         1018 |          28 |  0.934 |             30.0 |              33.340 |
 
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s21-ultra-5g-plot.png" />

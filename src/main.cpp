@@ -23,7 +23,7 @@ volatile uint8_t PORTD_NEW = 0;
 //
 // https://gcc.gnu.org/onlinedocs/gcc/AVR-Built-in-Functions.html
 // Delay execution for ticks cycles.
-// Note that this built-in does not take into account the effect
+// Note that this built-in function does not take into account the effect
 // of interrupts that might increase delay time.
 // ticks must be a compile-time integer constant;
 // delays with a variable number of cycles are not supported.
@@ -40,17 +40,20 @@ ISR(TIMER1_COMPA_vect)
     bitToggle(PORTC, PORTC0);
 #endif
 
-    // Disable global interrupts,
-    // Update output values and
-    // enable again global interrupts.
+    // Disable global interrupts.
+    // Update PORTB and PORTD, i.e. display COUNTER binary value with the LEDs.
+    // Enable global interrupts again.
     cli();
     PORTB = PORTB_NEW;
     PORTD = PORTD_NEW;
     sei();
 
+    // Increment COUNTER.
+    // Split COUNTER in 2 parts, one for PORTB and another for PORTD.
+    // These values will be displayed on the next timer interrupt.
     ++COUNTER;
     PORTB_NEW = COUNTER >> (8);
-    PORTD_NEW = COUNTER; // Only the 8 first bits will be copied.
+    PORTD_NEW = COUNTER;
 }
 
 /**
@@ -58,7 +61,7 @@ ISR(TIMER1_COMPA_vect)
  */
 void configure_gpio()
 {
-    // All pins of PORTB and PORTD set to OUTPUT.
+    // All pins of PORTB, PORTC and PORTD set to OUTPUT.
     DDRB = B11111111;
     DDRC = B11111111;
     DDRD = B11111111;
@@ -78,13 +81,12 @@ void configure_timer1()
     cli(); // Disable global interrupts.
 
     TCCR1A = 0b00000000; // Set normal mode of operation.
-    TCCR1B = 0b00000000; //
 
+    TCCR1B = 0b00000000;        //
     bitWrite(TCCR1B, WGM12, 1); // Turn on CTC mode.
-
-    bitWrite(TCCR1B, CS12, 0); // Prescale factor N.
-    bitWrite(TCCR1B, CS11, 0); //      See datasheet page 110
-    bitWrite(TCCR1B, CS10, 1); //      for values of CS10, CS11 and CS12.
+    bitWrite(TCCR1B, CS12, 0);  // Prescale factor N.
+    bitWrite(TCCR1B, CS11, 0);  //      See datasheet page 110
+    bitWrite(TCCR1B, CS10, 1);  //      for values of CS10, CS11 and CS12.
 
     OCR1A = 16666; // Set compare match register to desired timer count.
 
@@ -98,8 +100,8 @@ void configure_timer1()
 void display_info_on_serial()
 {
     // Write the settings to serial output.
-    // Beware that PORTD 0 and 1 are used both by the serial
-    // communication and the LEDs. That means that they cannot
+    // Beware that PORTD0 and PORTD1 are both used for serial
+    // communication and for LED GPIOs. That means that they cannot
     // work together and we need to close the serial port as
     // soon as we have written the information below.
     Serial.begin(BAUD_RATE);
@@ -128,19 +130,19 @@ void display_info_on_serial()
         bitRead(TCCR1B, CS12) * 4;
     float period_ms = prescaler / F_CPU * (OCR1A + 1);
 
-    Serial.print(F("OCR1A:           "));
+    Serial.print(F("OCR1A:             "));
     Serial.println(OCR1A);
-    Serial.print(F("PRESCALER N:     "));
+    Serial.print(F("PRESCALER N:       "));
     Serial.println(prescaler);
-    Serial.print(F("PERIOD CPU (ns): "));
+    Serial.print(F("CPU PERIOD (ns):   "));
     Serial.println(1.0 / float(F_CPU) * 1E9, 2);
-    Serial.print(F("F CPU (MHz):     "));
+    Serial.print(F("CPU FREQ (MHz):    "));
     Serial.println(F_CPU / 1E6);
-    Serial.print(F("PERIOD LED (ms): "));
+    Serial.print(F("TIMER PERIOD (ms): "));
     Serial.println(period_ms * 1000.0, 6);
-    Serial.print(F("F LED (Hz):      "));
+    Serial.print(F("TIMER FREQ (Hz):   "));
     Serial.println(1 / period_ms, 1);
-    Serial.print(F(""));
+    Serial.println(F(""));
 
     Serial.end();
 }
@@ -172,4 +174,6 @@ void setup()
  */
 void loop()
 {
+    // Everything is done in the timer ISR routine.
+    // So there is nothing here.
 }

@@ -9,6 +9,12 @@
 The goal of this project is to calibrate the slow motion frame rate of a smartphone.
 14 LEDs are displaying a counter that counts from 0 to 16’383 in binary.
 The counter is updated at 960 Hz by timer1 of the ATmega328P microcontroler.
+Some videos are included in this repository.
+They can also be viewed here:
+
+- [Slow motion calibration of a Samsung S20+ (good)](https://youtu.be/r17weH5NxCU)
+- [Slow motion calibration of a Samsung S20+ (bad)](https://youtu.be/cjHigEt8a3Y)
+- [Slow motion calibration of a Samsung S21 ultra 5G](https://youtu.be/89MwsHgRqDs)
 
 ## SETUP
 

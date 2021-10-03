@@ -1,0 +1,90 @@
+####
+#
+# CAMERA_DATA CONTENT
+# camera_name: Camera name.
+# video_file_path: Path to the video file. It must exist before running this program.
+# frames_directory_path: Path to the directory where frames will be saved. Will be created if needed.
+# rotate:
+#     0 => cv2.cv2.ROTATE_90_CLOCKWISE
+#     1 => cv2.cv2.ROTATE_180
+#     2 => cv2.cv2.ROTATE_90_COUNTERCLOCKWISE
+#     other => don’t rotate
+# flip:
+#     0 => flip verticaly
+#     1 => flip horizontaly
+#     other => don’t flip
+# led_coord_px: X-Y coordinates in pixel of the LED in the frame. Can be found with "get-px-coordinates.html".
+#
+##
+
+- camera_name: Samsung Galaxy S21 ultra 5G
+  frames_directory_path: ../frames-20210920_171411-nogit/
+  video_file_path: ../videos/20210920_171411.mp4
+  result_file_name: binary-clock-values-20210920_171411.csv
+  html_output_file_name: 20210920_171411.html
+  rotate: cv2.cv2.ROTATE_90_CLOCKWISE
+  flip: -1
+  led_coord_px: (
+    (970, 367),
+    (916, 365),
+    (864, 356),
+    (807, 369),
+    (753, 365),
+    (704, 348),
+    (651, 343),
+    (598, 344),
+    (546, 340),
+    (496, 336),
+    (443, 344),
+    (388, 359),
+    (337, 346),
+    (291, 349),
+    )
+
+- camera_name: Samsung Galaxy S20+ (bad frame count)
+  video_file_path: ../videos/20210922_123911.mp4
+  frames_directory_path: ../frames-20210922_123911-nogit/
+  result_file_name: binary-clock-values-20210922_123911.csv
+  html_output_file_name: 20210922_123911.html
+  rotate: cv2.cv2.ROTATE_90_CLOCKWISE
+  flip: -1
+  led_coord_px: (
+    (1167, 380),
+    (1086, 381),
+    (1009, 369),
+    (929, 397),
+    (846, 397),
+    (766, 375),
+    (683, 381),
+    (610, 381),
+    (530, 377),
+    (453, 378),
+    (365, 399),
+    (281, 418),
+    (194, 377),
+    (113, 406),
+    )
+
+- camera_name: Samsung Galaxy S20+ (good frame count)
+  video_file_path: ../videos/20210922_133004.mp4
+  frames_directory_path: ../frames-20210922_133004-nogit/
+  result_file_name: binary-clock-values-20210922_133004.csv
+  html_output_file_name: 20210922_133004.html
+  rotate: cv2.cv2.ROTATE_90_COUNTERCLOCKWISE
+  flip: -1
+  led_coord_px: (
+    (1038, 251),
+    (974, 262),
+    (914, 251),
+    (860, 260),
+    (802, 260),
+    (736, 251),
+    (682, 240),
+    (628, 243),
+    (566, 237),
+    (510, 239),
+    (448, 251),
+    (390, 261),
+    (329, 235),
+    (267, 255),
+    )

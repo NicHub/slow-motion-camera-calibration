@@ -8,15 +8,19 @@ pip install opencv-python
 
 """
 
-import cv2
 import os
 
+import cv2
+import numpy as np
+from bokeh.plotting import figure, output_file, show
+import yaml
 
-def create_output_dir(settings):
+
+def create_output_dir(camera_info):
     """ ___ """
 
-    if not os.path.exists(settings["frames_directory_path"]):
-        os.makedirs(settings["frames_directory_path"])
+    if not os.path.exists(camera_info["frames_directory_path"]):
+        os.makedirs(camera_info["frames_directory_path"])
 
 
 def mean_hsv_val_around_px(hsv, px_loc):
@@ -39,17 +43,18 @@ def mean_hsv_val_around_px(hsv, px_loc):
     return mean_v
 
 
-def extract_and_analyze_frames_from_video(settings):
+def extract_frames_from_video_and_evaluate_binary_number_displayed(camera_info):
     """ ___ """
 
-    _video_basename = os.path.basename(settings["video_file_path"])
+    _video_basename = os.path.basename(camera_info["video_file_path"])
     _video_name = os.path.splitext(_video_basename)[0]
-    _capture_image = cv2.VideoCapture(settings["video_file_path"])
+    _capture_image = cv2.VideoCapture(camera_info["video_file_path"])
     _total_frame_count = int(_capture_image.get(cv2.CAP_PROP_FRAME_COUNT))
-    _binary_clock_values = []
+    # _total_frame_count = 10
+    binary_clock_values = []
 
     print(
-        f'\n\rExtracting frames of:        \"{settings["video_file_path"]}\"\n', end="")
+        f'\n\rExtracting frames of:        \"{camera_info["video_file_path"]}\"\n', end="")
     print(f"\rNumber of frames to extract: {_total_frame_count}\n", end="")
 
     for _frame_count in range(_total_frame_count):
@@ -59,16 +64,16 @@ def extract_and_analyze_frames_from_video(settings):
         # Flip it.
         _, _frame = _capture_image.read()
         print(f'\rExtracting frame {_frame_count}', end=" ")
-        if settings["rotate"] in (0, 1, 2):
-            _frame = cv2.rotate(_frame, settings["rotate"])
-        if settings["flip"] in (0, 1):
-            _frame = cv2.flip(_frame, settings["flip"])
+        if camera_info["rotate"] in (0, 1, 2):
+            _frame = cv2.rotate(_frame, camera_info["rotate"])
+        if camera_info["flip"] in (0, 1):
+            _frame = cv2.flip(_frame, camera_info["flip"])
 
         # Evaluate if the LEDs are ON or OFF
         # and calculate the binary number value displayed.
         _hsv = cv2.cvtColor(_frame, cv2.COLOR_BGR2HSV)
         _binary_clock_value = 0
-        for _cnt, _px_loc in enumerate(settings["led_coord_px"]):
+        for _cnt, _px_loc in enumerate(camera_info["led_coord_px"]):
             _mean_v = mean_hsv_val_around_px(_hsv, _px_loc)
             _bit_val = _mean_v > 253
 
@@ -88,125 +93,97 @@ def extract_and_analyze_frames_from_video(settings):
                 0.5,  # font size
                 _color,
                 2)  # font stroke
-        _binary_clock_values.append(f"{_binary_clock_value}")
+        binary_clock_values.append(_binary_clock_value)
 
         # Save the frame.
-        _image_path = f'{settings["frames_directory_path"]}{_video_name}-{_frame_count:06}.jpg'
+        _image_path = f'{camera_info["frames_directory_path"]}{_video_name}-{_frame_count:06}.jpg'
         cv2.imwrite(_image_path, _frame)
 
     # Save the binary number values for each frame in a CSV file.
-    _binary_clock_values_string = "\n".join(_binary_clock_values)
-    _result_file_name = f'binary-clock-values-{_video_name}.csv'
-    with open(_result_file_name, "w") as _f:
-        _f.write(_binary_clock_values_string)
-    print(f"\rAnalysis saved under:         \"{_result_file_name}\"\n", end="")
+    binary_clock_values_string = "\n".join(str(n) for n in binary_clock_values)
+    with open(camera_info["result_file_name"], "w") as _f:
+        _f.write(binary_clock_values_string)
+    print(
+        f'\rAnalysis saved under:        \"{camera_info["result_file_name"]}\"\n', end="")
     print("\r", end="")
 
+    # Store results.
+    camera_info["binary_clock_values"] = arr = np.array(binary_clock_values)
 
-def get_settings():
-    """
-    # SETTINGS CONTENT
 
-    "video_file_path" : Path to the video file. It must exist before running this program.
-    "frames_directory_path": Path to the directory where frames will be saved. Will be created if needed.
-    "rotate":
-        0 => cv2.cv2.ROTATE_90_CLOCKWISE
-        1 => cv2.cv2.ROTATE_180
-        2 => cv2.cv2.ROTATE_90_COUNTERCLOCKWISE
-        other => don’t rotate
-    "flip":
-        0 => flip verticaly
-        1 => flip horizontaly
-        other => don’t flip
-    "led_coord_px": X-Y coordinates in pixel of the LED in the frame. Can be found with "get-px-coordinates.html".
-    """
+def get_camera_info():
+    """ ___ """
 
-    settings_list = [
-        {
-            "video_file_path": os.path.expanduser(
-                "../videos/20210920_171411.mp4"),
-            "frames_directory_path": os.path.expanduser(
-                "../frames-20210920_171411-nogit/"),
-            "rotate": cv2.cv2.ROTATE_90_CLOCKWISE,
-            "flip": -1,
-            "led_coord_px": (
-                (970, 367),
-                (916, 365),
-                (864, 356),
-                (807, 369),
-                (753, 365),
-                (704, 348),
-                (651, 343),
-                (598, 344),
-                (546, 340),
-                (496, 336),
-                (443, 344),
-                (388, 359),
-                (337, 346),
-                (291, 349),
-            )
-        },
-        {
-            "video_file_path": os.path.expanduser(
-                "../videos/20210922_123911.mp4"),
-            "frames_directory_path": os.path.expanduser(
-                "../frames-20210922_123911-nogit/"),
-            "rotate": cv2.cv2.ROTATE_90_CLOCKWISE,
-            "flip": -1,
-            "led_coord_px": (
-                (1167, 380),
-                (1086, 381),
-                (1009, 369),
-                (929, 397),
-                (846, 397),
-                (766, 375),
-                (683, 381),
-                (610, 381),
-                (530, 377),
-                (453, 378),
-                (365, 399),
-                (281, 418),
-                (194, 377),
-                (113, 406),
-            )
-        },
-        {
-            "video_file_path": os.path.expanduser(
-                "../videos/20210922_133004.mp4"),
-            "frames_directory_path": os.path.expanduser(
-                "../frames-20210922_133004-nogit/"),
-            "rotate": cv2.cv2.ROTATE_90_COUNTERCLOCKWISE,
-            "flip": -1,
-            "led_coord_px": (
-                (1038, 251),
-                (974, 262),
-                (914, 251),
-                (860, 260),
-                (802, 260),
-                (736, 251),
-                (682, 240),
-                (628, 243),
-                (566, 237),
-                (510, 239),
-                (448, 251),
-                (390, 261),
-                (329, 235),
-                (267, 255),
+    with open("camera_data.yaml", "rt") as _f:
+        data = yaml.full_load(_f.read())
 
-            ),
-        }
-    ]
-    return settings_list
+    for _d in data:
+        _d["rotate"] = eval(_d["rotate"])
+        _d["led_coord_px"] = eval(_d["led_coord_px"])
+
+    return data
+
+
+def analyze_results(camera_info):
+    """ ___ """
+
+    binary_clock_values_diff2 = np.diff(camera_info["binary_clock_values"], 2)
+    _filter_criterion = 15
+    _filter = np.absolute(binary_clock_values_diff2) > _filter_criterion
+    _indexes_to_filter_out = np.where(_filter)[0] + 1
+    camera_info["binary_clock_values"][_indexes_to_filter_out] = 0
+    print(f"filter criterion:            {_filter_criterion}")
+    print(f"bad measurements count:      {len(_indexes_to_filter_out)}")
+    print(
+        f'total measurements count:    {len(camera_info["binary_clock_values"])}')
+
+    output_file(camera_info["html_output_file_name"])
+    p = figure(width=2000, height=1000)
+    p.line(range(len(camera_info["binary_clock_values"])),
+           camera_info["binary_clock_values"],
+           line_width=2, color="red", alpha=0.5)
+    p.circle(range(len(camera_info["binary_clock_values"])),
+             camera_info["binary_clock_values"],
+             size=4, color="red", alpha=0.5)
+    p.line(range(len(binary_clock_values_diff2)),
+           binary_clock_values_diff2,
+           line_width=2, color="navy", alpha=0.5)
+    p.circle(range(len(binary_clock_values_diff2)),
+             binary_clock_values_diff2,
+             size=4, color="navy", alpha=0.5)
+    p.line(range(len(_filter)),
+           _filter,
+           line_width=2, color="navy", alpha=0.5)
+    p.circle(_indexes_to_filter_out,
+             camera_info["binary_clock_values"][_indexes_to_filter_out],
+             size=20, color="green", alpha=0.5)
+    p.line(_indexes_to_filter_out,
+           camera_info["binary_clock_values"][_indexes_to_filter_out],
+           line_width=2, color="green", alpha=0.5)
+    show(p)
+
+
+def read_csv(camera_info):
+    """ ___ """
+
+    camera_info["binary_clock_values"] = np.loadtxt(
+        camera_info["result_file_name"], dtype=int)
 
 
 if __name__ == "__main__":
 
-    settings_list = get_settings()
-    settings_list = [settings_list[2]]
+    camera_info_list = get_camera_info()
+    camera_info_list = [camera_info_list[2]]
 
-    for settings in settings_list:
-        if not os.path.exists(settings["video_file_path"]):
-            print(f'File not found: {settings["video_file_path"]}')
+    for camera_info in camera_info_list:
+        if not os.path.exists(camera_info["video_file_path"]):
+            print(f'File not found: {camera_info["video_file_path"]}')
             continue
-        create_output_dir(settings)
-        extract_and_analyze_frames_from_video(settings)
+        create_output_dir(camera_info)
+        debug = False
+        if debug:
+            read_csv(camera_info)
+        else:
+            extract_frames_from_video_and_evaluate_binary_number_displayed(
+                camera_info)
+        analyze_results(camera_info)

@@ -111,9 +111,9 @@ Run it once to extract the images of the movie. You can kill it after it has gen
 
 Then use the html file `analysis/get-px-coordinates.html` to get the coordinates of the LED on one picture.
 
-Modify the Python script with the correct coordinates and run it again.
+Modify `analysis/camera_data.yaml` with the correct coordinates and run `analysis/analysis.py` again.
 
-The results are stored in `analysis/camera-calib.csv`.
+The results are stored in `analysis/binary-clock-values-<date>.csv`.
 
 Open the spreadsheet `analysis/camera-slow-motion-calibration.ods`.
 

@@ -12,8 +12,8 @@ The counter is updated at 960 Hz by timer1 of the ATmega328P microcontroler.
 Some videos are included in this repository.
 They can also be viewed here:
 
-- [Slow motion calibration of a Samsung S20+ (good)](https://youtu.be/r17weH5NxCU)
-- [Slow motion calibration of a Samsung S20+ (bad)](https://youtu.be/cjHigEt8a3Y)
+- [Slow motion calibration of a Samsung S10+ (good)](https://youtu.be/r17weH5NxCU)
+- [Slow motion calibration of a Samsung S10+ (bad)](https://youtu.be/cjHigEt8a3Y)
 - [Slow motion calibration of a Samsung S21 ultra 5G](https://youtu.be/89MwsHgRqDs)
 
 ## SETUP
@@ -55,7 +55,7 @@ There are two mechanisms for setting the time when the timer overflows:
 The pre-scale factor N is used to divide the timer speed from the clock speed.
 This is achieved by incrementing the timer every N clock cycles.
 N can take the following values: 1, 8, 64, 256, 1024
-For each value N, we can calculate the longest possible time before the timer overflows:
+For each value of N, we can calculate the longest possible time before the timer overflows:
 
     tmax = N / FCPU × 2^16
 
@@ -125,7 +125,7 @@ Duplicate an existing analysis sheet and copy-paste your results in this new she
 
 ## RESULTS
 
-### SAMSUNG GALAXY S20+
+### SAMSUNG GALAXY S10+
 
 The frame rate of this smartphone is not constant over time.
 It goes faster (i.e. not slowmo) at the beginning and at the end of the movie.
@@ -144,7 +144,7 @@ I present both good and bad results below.
 |    3 |           268 |          296 |          29 |  1.421 |             20.4 |              48.995 |
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-bad.png" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s10+-plot-bad.png" />
 </p>
 
 #### GOOD RESULTS
@@ -156,7 +156,7 @@ I present both good and bad results below.
 |    3 |           407 |          432 |          26 |  1.002 |             26.0 |              38.522 |
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s20+-plot-good.png" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s10+-plot-good.png" />
 </p>
 
 ### SAMSUNG GALAXY S21 ULTRA 5G

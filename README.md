@@ -1,7 +1,7 @@
-# CAMERA SLOW MOTION CALIBRATION
+# SLOW MOTION CAMERA CALIBRATION
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/camera-slow-motion-calibration-001.jpg" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/slow-motion-camera-calibration-001.jpg" />
 </p>
 
 ## ABSTRACT
@@ -126,12 +126,12 @@ Modify `analysis/camera_data.yaml` with the correct coordinates and run `analysi
 
 The results are stored in `analysis/binary-clock-values-<date>.csv`.
 
-Open the spreadsheet `analysis/camera-slow-motion-calibration.ods`.
+Open the spreadsheet `analysis/slow-motion-camera-calibration.ods`.
 
 Duplicate an existing analysis sheet and copy-paste your results in this new sheet.
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/20210920_171411-flip-1-000011.jpg" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/20210920_171411-flip-1-000011.jpg" />
 </p>
 
 ## RESULTS
@@ -155,7 +155,7 @@ I present both good and bad results below.
 |    3 |           268 |          296 |          29 |  1.421 |             20.4 |              48.995 |
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s10+-plot-bad.png" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/samsung-s10+-plot-bad.png" />
 </p>
 
 #### GOOD RESULTS
@@ -167,7 +167,7 @@ I present both good and bad results below.
 |    3 |           407 |          432 |          26 |  1.002 |             26.0 |              38.522 |
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s10+-plot-good.png" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/samsung-s10+-plot-good.png" />
 </p>
 
 ### SAMSUNG GALAXY S21 ULTRA 5G
@@ -185,5 +185,5 @@ There are 1018 frames in total.
 |    3 |           991 |         1018 |          28 |  0.934 |             30.0 |              33.340 |
 
 <p align="center">
-<img width=100% src="https://raw.githubusercontent.com/NicHub/camera-slow-motion-calibration/main/images/samsung-s21-ultra-5g-plot.png" />
+<img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/samsung-s21-ultra-5g-plot.png" />
 </p>

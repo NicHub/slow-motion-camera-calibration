@@ -173,7 +173,7 @@ def read_csv(camera_info):
 if __name__ == "__main__":
 
     camera_info_list = get_camera_info()
-    camera_info_list = [camera_info_list[2]]
+    camera_info_list = [camera_info_list[1]]
 
     for camera_info in camera_info_list:
         if not os.path.exists(camera_info["video_file_path"]):

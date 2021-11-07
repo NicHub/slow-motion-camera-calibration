@@ -17,11 +17,35 @@
 #
 ##
 
+- camera_name: Samsung Galaxy S20
+  video_file_path: ../videos/20211107_174550_samsung_s20.mp4
+  frames_directory_path: ../frames-20211107_174550_samsung_s20-nogit/
+  result_file_name: binary-clock-values-20211107_174550_samsung_s20.csv
+  html_output_file_name: 20211107_174550_samsung_s20.html
+  rotate: cv2.cv2.ROTATE_90_COUNTERCLOCKWISE
+  flip: -1
+  led_coord_px: (
+    (258, 328),
+    (289, 323),
+    (321, 312),
+    (355, 321),
+    (385, 314),
+    (416, 314),
+    (448, 311),
+    (479, 314),
+    (509, 313),
+    (540, 320),
+    (571, 313),
+    (604, 317),
+    (635, 317),
+    (667, 325),
+    )
+
 - camera_name: Samsung Galaxy S21 ultra 5G
-  frames_directory_path: ../frames-20210920_171411-nogit/
-  video_file_path: ../videos/20210920_171411.mp4
-  result_file_name: binary-clock-values-20210920_171411.csv
-  html_output_file_name: 20210920_171411.html
+  frames_directory_path: ../frames-20210920_171411_samsung_s21_ultra_5g-nogit/
+  video_file_path: ../videos/20210920_171411_samsung_s21_ultra_5g.mp4
+  result_file_name: binary-clock-values-20210920_171411_samsung_s21_ultra_5g.csv
+  html_output_file_name: 20210920_171411_samsung_s21_ultra_5g.html
   rotate: cv2.cv2.ROTATE_90_CLOCKWISE
   flip: -1
   led_coord_px: (
@@ -41,11 +65,11 @@
     (291, 349),
     )
 
-- camera_name: Samsung Galaxy S20+ (bad frame count)
-  video_file_path: ../videos/20210922_123911.mp4
-  frames_directory_path: ../frames-20210922_123911-nogit/
-  result_file_name: binary-clock-values-20210922_123911.csv
-  html_output_file_name: 20210922_123911.html
+- camera_name: Samsung Galaxy S10+ (bad frame count)
+  video_file_path: ../videos/20210922_123911_samsung_s10+_bad.mp4
+  frames_directory_path: ../frames-20210922_123911_samsung_s10+_bad-nogit/
+  result_file_name: binary-clock-values-20210922_123911_samsung_s10+_bad.csv
+  html_output_file_name: 20210922_123911_samsung_s10+_bad.html
   rotate: cv2.cv2.ROTATE_90_CLOCKWISE
   flip: -1
   led_coord_px: (
@@ -65,11 +89,11 @@
     (113, 406),
     )
 
-- camera_name: Samsung Galaxy S20+ (good frame count)
-  video_file_path: ../videos/20210922_133004.mp4
-  frames_directory_path: ../frames-20210922_133004-nogit/
-  result_file_name: binary-clock-values-20210922_133004.csv
-  html_output_file_name: 20210922_133004.html
+- camera_name: Samsung Galaxy S10+ (good frame count)
+  video_file_path: ../videos/20210922_133004_samsung_s10+_good.mp4
+  frames_directory_path: ../frames-20210922_133004_samsung_s10+_good-nogit/
+  result_file_name: binary-clock-values-20210922_133004_samsung_s10+_good.csv
+  html_output_file_name: 20210922_133004_samsung_s10+_good.html
   rotate: cv2.cv2.ROTATE_90_COUNTERCLOCKWISE
   flip: -1
   led_coord_px: (

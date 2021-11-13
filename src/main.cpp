@@ -69,6 +69,9 @@ void configureGpio()
 void configureTimer1()
 {
     cli();                      // Disable global interrupts.
+    bitClear(TIMSK0, TOIE0);    // Stop timer 0. This means the Arduino
+                                // functions `micros()`, `millis()` and `delay()`
+                                // will not work anymore.
     TCCR1A = 0b00000000;        // Set normal mode of operation.
     TCCR1B = 0b00000000;        //
     bitWrite(TCCR1B, WGM12, 1); // Turn on CTC mode.

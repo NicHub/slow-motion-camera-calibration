@@ -9,14 +9,12 @@ https://github.com/NicHub/slow-motion-camera-calibration
 */
 
 #include <Arduino.h>
-// #include <avr/io.h>
-// #include <avr/interrupt.h>
 
 volatile uint16_t COUNTER = 0;
 volatile uint8_t PORTB_NEW = 0;
 volatile uint8_t PORTD_NEW = 0;
 
-#define DEBUG true
+#define DEBUG false
 
 #if DEBUG == true
 // DELAY_CYCLES(n) is for time measurement on the oscilloscope.
@@ -36,17 +34,9 @@ volatile uint8_t PORTD_NEW = 0;
  */
 ISR(TIMER1_COMPA_vect)
 {
-#if DEBUG == true
-    bitToggle(PORTC, PORTC0);
-#endif
-
-    // Disable global interrupts.
     // Update PORTB and PORTD, i.e. display COUNTER binary value with the LEDs.
-    // Enable global interrupts again.
-    cli();
     PORTB = PORTB_NEW;
     PORTD = PORTD_NEW;
-    sei();
 
     // Increment COUNTER.
     // Split COUNTER in 2 parts, one for PORTB and another for PORTD.
@@ -78,20 +68,16 @@ void configureGpio()
  */
 void configureTimer1()
 {
-    cli(); // Disable global interrupts.
-
-    TCCR1A = 0b00000000; // Set normal mode of operation.
-
+    cli();                      // Disable global interrupts.
+    TCCR1A = 0b00000000;        // Set normal mode of operation.
     TCCR1B = 0b00000000;        //
     bitWrite(TCCR1B, WGM12, 1); // Turn on CTC mode.
     bitWrite(TCCR1B, CS12, 0);  // Prescale factor N.
     bitWrite(TCCR1B, CS11, 0);  //      See datasheet page 110
     bitWrite(TCCR1B, CS10, 1);  //      for values of CS10, CS11 and CS12.
-
-    OCR1A = 16666; // Set compare match register to desired timer count.
-
-    TIMSK1 |= (1 << OCIE1A); // Enable timer compare interrupt.
-    sei();                   // Enable global interrupts.
+    OCR1A = 16666;              // Set compare match register to desired timer count.
+    TIMSK1 |= (1 << OCIE1A);    // Enable timer compare interrupt.
+    sei();                      // Enable global interrupts.
 }
 
 /**

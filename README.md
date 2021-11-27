@@ -25,9 +25,10 @@ Connect the LEDs to output 0 to 13.
 
 http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-7810-Automotive-Microcontrollers-ATmega328P_Datasheet.pdf
 
-## ARTICLE ABOUT TIMERS (in French)
+## ARTICLE ABOUT TIMERS
 
-https://www.locoduino.org/spip.php?article84
+- <https://arduinoinfo.mywikis.net/wiki/Timers-Arduino>
+- <https://www.locoduino.org/spip.php?article84> (in French)
 
 ## Samsung S21 ULTRA 5G
 

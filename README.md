@@ -188,3 +188,11 @@ There are 1018 frames in total.
 <p align="center">
 <img width=100% src="https://raw.githubusercontent.com/NicHub/slow-motion-camera-calibration/main/images/samsung-s21-ultra-5g-plot.png" />
 </p>
+
+
+# FUTURE TESTS
+
+- https://www.samsung.com/global/galaxy/galaxy-s22-ultra/specs/
+- https://www.androidauthority.com/samsung-galaxy-s22-ultra-960fps-3139987/
+
+

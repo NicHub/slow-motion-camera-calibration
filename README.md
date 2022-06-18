@@ -190,7 +190,7 @@ There are 1018 frames in total.
 </p>
 
 
-# FUTURE TESTS
+# FUTURE TESTS
 
 - https://www.samsung.com/global/galaxy/galaxy-s22-ultra/specs/
 - https://www.androidauthority.com/samsung-galaxy-s22-ultra-960fps-3139987/

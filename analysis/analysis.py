@@ -2,7 +2,7 @@
 
 Extract frames from a video
 
-pip install opencv-python
+pip install -r requirements.txt
 
 © september 2021, ouilogique.com
 

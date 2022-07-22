@@ -71,15 +71,15 @@ For each value of N, we can calculate the longest possible time before the timer
 
     tmax = N / FCPU × 2^16
 
-        N         tmax (s)
-    =====================
-        1        4.10E-03
-        8        32.7E-03
-       64         262E-03
-      256        1.05E+00
-     1024        4.19E+00
+        N         tmax (s)    C12    C11    C10
+    ============================================
+        1        4.10E-03       0      0      1
+        8        32.7E-03       0      1      0
+       64         262E-03       0      1      1
+      256        1.05E+00       1      0      0
+     1024        4.19E+00       1      0      1
 
-2. THE OUTPUT COMPARE REGISTER
+1. THE OUTPUT COMPARE REGISTER
 
 Instead of counting up to the maximum value, which is `MAX = N × 2^16`, we can configure the timer to overflow at a smaller value called TOP.
 This TOP value is set in the Output Compare Register OCRA1.

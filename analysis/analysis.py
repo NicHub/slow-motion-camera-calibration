@@ -1,7 +1,5 @@
 """
 
-Extract frames from a video
-
 pip install -r requirements.txt
 
 © september 2021, ouilogique.com
